@@ -39,43 +39,43 @@
 <body>
 	<h1 align="center">Gestion de inventario</h1>
 	<div>
-		<form action="">
+		<form action="" method="post">
 			<div align="center" style="display: flex;">
 				<div>
 					<p>Id</p>
-					<input type="number">
+					<input type="number" name="id">
 				</div>
 				<div>
 					<p>Articulo</p>
-					<input type="text">
+					<input type="text" name="articulo">
 				</div>
 				<div>
 					<p>Cantidad</p>
-					<input type="number">
+					<input type="number" name="cantidad">
 				</div>
 				<div>
 					<p>Precio</p>
-					<input type="number">
+					<input type="number" name="precio">
 				</div>
 				<div>
 					<p>Descuento</p>
-					<input type="text">
+					<input type="text" name="descuento">
 				</div>
 				<div>
 					<p>Utilidad</p>
-					<input type="number">
+					<input type="number" name="utilidad">
 				</div>
 				<div>
 					<p>Fecha</p>
-					<input type="text">
+					<input type="text" name="fecha">
 				</div>
 			</div>
 			<div align="center" style="display: flex;">
-				<input type="submit" value="Agregar">
-				<input type="submit" value="Modificar">
-				<input type="submit" value="Borrar">
-				<input type="submit" value="Borrar todo">
-				<input type="submit" value="Limpiar">
+				<input type="submit" name="agregar" value="Agregar">
+				<input type="submit" name="modificar" value="Modificar">
+				<input type="submit" name="borrar" value="Borrar">
+				<input type="submit" name="borrartodo" value="Borrar todo">
+				<input type="submit" name="limpiar" value="Limpiar">
 			</div>
 		</form>
 		<table id="example" class="display" style="width:100%">
@@ -91,10 +91,47 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-	           
+	        	<?php 
+	        		$archivoLectura = file("productos.txt");
+
+	        		foreach ($archivoLectura as $jsonProducto) {
+	        			$decoProductos = json_decode($jsonProducto);
+
+	        			echo "<tr>
+	        					<td>$decoProductos->id</td>
+	        					<td>$decoProductos->articulo</td>
+	        					<td>$decoProductos->cantidad</td>
+	        					<td>$$decoProductos->precio</td>
+	        					<td>$decoProductos->descuento%</td>
+	        					<td>$$decoProductos->utilidad</td>
+	        					<td>$decoProductos->fecha</td>
+	        				  </tr>";
+	        		}
+	        	?>
 	        </tbody>
 	    </table>
 	</div>
+	<?php 
+		if($_SERVER['REQUEST_METHOD'] == "POST") {
+			$id = $_POST['id'];
+			$articulo = $_POST['articulo'];
+			$cantidad = $_POST['cantidad'];
+			$precio = $_POST['precio'];
+			$descuento = $_POST['descuento'];
+			$utilidad = $_POST['utilidad'];
+			$fecha = $_POST['fecha'];
+
+			if(isset($_POST['agregar'])) {
+				$producto = array("id"=>$id, "articulo"=>$articulo, "cantidad"=>$cantidad, "precio"=>$precio, "descuento"=>$descuento, "utilidad"=>$utilidad, "fecha"=>$fecha);
+				$productoJSON = json_encode($producto);
+				$archivo = fopen("productos.txt", "a");
+
+				fwrite($archivo, $productoJSON);
+				fclose($archivo);
+			}
+		}
+
+	?>
 	<script>
 		new DataTable('#example');
 	</script>
