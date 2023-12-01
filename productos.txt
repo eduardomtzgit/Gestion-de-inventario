@@ -1,5 +1,6 @@
-{"id":"1","articulo":"Leche","cantidad":"10","precio":"20","descuento":"0","utilidad":"1","fecha":"10\/11\/23"}
-{"id":"2","articulo":"Atun","cantidad":"10","precio":"11","descuento":"0","utilidad":"1","fecha":"10\/11\/23"}
-{"id":"3","articulo":"Frijoles","cantidad":"30","precio":"17","descuento":"0","utilidad":"1","fecha":"10\/11\/23"}
-{"id":"4","articulo":"Sopa","cantidad":"5","precio":"13","descuento":"0","utilidad":"1","fecha":"10\/10\/23"}
-{"id":"5","articulo":"Arina","cantidad":"8","precio":"17","descuento":"0","utilidad":"1","fecha":"10\/10\/23"}
+{"id":"1","articulo":"Leche","cantidad":"10","precio":"20","descuento":"0","utilidad":"1","fecha":"10/11/23"}
+{"id":"2","articulo":"Atun","cantidad":"10","precio":"11","descuento":"0","utilidad":"1","fecha":"10/11/23"}
+{"id":"4","articulo":"Pan","cantidad":"19","precio":"5","descuento":"0","utilidad":"1","fecha":"10/10/23"}
+{"id":"5","articulo":"Arina","cantidad":"8","precio":"17","descuento":"0","utilidad":"1","fecha":"10/10/23"}
+{"id":"6","articulo":"Cacahuates","cantidad":"11","precio":"15","descuento":"0","utilidad":"2","fecha":"29/11/23"}
+{"id":"3","articulo":"Hueos","cantidad":"100","precio":"20","descuento":"1","utilidad":"2","fecha":"11/11/23"}
