@@ -20,7 +20,7 @@
 			border: 1px solid gray;
 		}
 
-		input[type=submit] {
+		input[type=submit], input[type=button] {
 			width: 120px;
 			height: 30px;
 			margin: 20px 70px 50px 70px;
@@ -31,11 +31,11 @@
 <body>
 	<h1 align="center">Gestion de inventario</h1>
 	<div>
-		<form action="" method="post">
+		<form action="" method="post" name="form">
 			<div align="center" style="display: flex;">
 				<div>
 					<p>Id</p>
-					<input type="number" name="id" id="inpId">
+					<input type="number" name="inpId" id="inpId">
 				</div>
 				<div>
 					<p>Articulo</p>
@@ -67,7 +67,7 @@
 				<input type="submit" name="modificar" value="Modificar">
 				<input type="submit" name="borrar" value="Borrar">
 				<input type="submit" name="borrartodo" value="Borrar todo">
-				<input type="submit" name="limpiar" value="Limpiar">
+				<input type="button" name="limpiar" value="Limpiar" onclick="cleanInputs()">
 			</div>
 		</form>
 		<table id="example" class="display" style="width:100%">
@@ -105,7 +105,7 @@
 	</div>
 	<?php 
 		if($_SERVER['REQUEST_METHOD'] == "POST") {
-			$id = $_POST['id'];
+			$id = $_POST['inpId'];
 			$articulo = $_POST['articulo'];
 			$cantidad = $_POST['cantidad'];
 			$precio = $_POST['precio'];
@@ -118,9 +118,10 @@
 				$productoJSON = json_encode($producto);
 				$archivo = fopen("productos.txt", "a");
 
-				fwrite($archivo, $productoJSON);
+				fwrite($archivo, $productoJSON.PHP_EOL);
 				fclose($archivo);
 
+				//Script para agregar item y evitar recargar pagina (Evita colocar header())
 				echo "<script>
 						var tab = document.getElementById('tbody');
 						var trNode = document.createElement('tr');
@@ -169,26 +170,63 @@
 				fwrite($fileWrite, $fileJsonUpd);
 				fwrite($fileWrite, $fileUpd);
 				fclose($fileWrite);
+				header("Location: Index.php");
+			} else if(isset($_POST['borrar'])) {
+				$fileReadDel = file("productos.txt");
+				$fileJsonUpd = "";
+
+				foreach($fileReadDel as $line) {
+					$prodts = json_decode($line);
+
+					if($prodts->id != $id) {
+	    				$fileJsonUpd .= '{"id":"'.$prodts->id.'","articulo":"'.$prodts->articulo.'","cantidad":"'.$prodts->cantidad.'","precio":"'.$prodts->precio.'","descuento":"'.$prodts->descuento.'","utilidad":"'.$prodts->utilidad.'","fecha":"'.$prodts->fecha.'"}'.PHP_EOL;
+	    			}
+				}
+
+				$fileWrite = fopen("productos.txt", "w");
+
+				fwrite($fileWrite, $fileJsonUpd);
+				fclose($fileWrite);
+				header("Location: Index.php");
+			} else if(isset($_POST['borrartodo'])) {
+				$fileDel = fopen('productos.txt', 'w');
+				$void = "";
+
+				fwrite($fileDel, $void);
+				fclose($fileDel);
+				header("Location: Index.php");
 			}
 		}
 	?>
-	<script>
-		var table = new DataTable('#example');
+	<script>	
+		$(document).ready(function() {
+			var table = new DataTable('#example');
 
-		table.on("click", "tbody tr", function () {
-    		let data = table.row(this).data();
-    		let nPre = data[3].replace("$", "");
-    		let nDes = data[4].replace("%", "");
-    		let nUtil = data[5].replace("$", "");
+			table.on("click", "tbody tr", function () {
+	    		let data = table.row(this).data();
+	    		let nPre = data[3].replace("$", "");
+	    		let nDes = data[4].replace("%", "");
+	    		let nUtil = data[5].replace("$", "");
 
-    		$('#inpId').val(data[0]);
-    		$('#inpArt').val(data[1]);
-    		$('#inpCant').val(data[2]);
-    		$('#inpPrec').val(nPre);
-    		$('#inpDesc').val(nDes);
-    		$('#inpUtil').val(nUtil);
-    		$('#inpFech').val(data[6]);
-    	})
+	    		$('#inpId').val(data[0]);
+	    		$('#inpArt').val(data[1]);
+	    		$('#inpCant').val(data[2]);
+	    		$('#inpPrec').val(nPre);
+	    		$('#inpDesc').val(nDes);
+	    		$('#inpUtil').val(nUtil);
+	    		$('#inpFech').val(data[6]);
+	    	})
+		})
+
+		function cleanInputs() {
+			$('#inpId').val('');
+    		$('#inpArt').val('');
+    		$('#inpCant').val('');
+    		$('#inpPrec').val('');
+    		$('#inpDesc').val('');
+    		$('#inpUtil').val('');
+    		$('#inpFech').val('');
+		}
 	</script>
 </body>
 </html>
